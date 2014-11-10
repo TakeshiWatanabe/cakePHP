@@ -4,6 +4,8 @@ class PostsController extends AppController {
 
     public $components = array('Session');
 
+    public $uses = array('Post','Category');
+
     public function beforeFilter(){
         parent::beforeFilter();
 
@@ -13,11 +15,23 @@ class PostsController extends AppController {
     public function index() {
     	$posts = $this->Post->find('all');
 
-    	$this->set(compact('posts'));
+        //Categoryモデルを使ってデータを取得
+        $categories = $this->Category->find('all');
+
+    	$this->set(compact('posts','categories'));
 
         //$this->set('posts', $this->Post->find('all'));
     }
 
+    public function category_index($category_id = null) {
+        $posts = $this->Post->find('all',array('conditions' => array('category_id' => $category_id)));
+
+        //Categoryモデルを使ってデータを取得
+        $categories = $this->Category->find('all');
+
+        $this->set(compact('posts','categories'));
+
+    }
 
     public function view($id = null) {
         if (!$id) {
