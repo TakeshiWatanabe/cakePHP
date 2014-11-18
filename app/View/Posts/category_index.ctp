@@ -1,6 +1,7 @@
 <!-- File: /app/View/Posts/index.ctp -->
 <?php  // debug($posts); ?>
 <h1>Blog posts</h1>
+<h2>カテゴリー「<?php echo $selectedCategory[0]['Category']['name']; ?>」の一覧</h2>
 <div style="float:left;">
 <table>
     <tr>
@@ -28,18 +29,6 @@ array('controller' => 'posts', 'action' => 'view', $post['Post']['id'])); ?>
 </table>
 </div>
 <div style="float:right;">
-    <table>
-        <?php foreach ($categories as $category): 
-       // debug($post);
+    <?php echo $this->element('rightside_menu'); ?>
 
-    ?>
-    <tr>
-        <td>
-            <?php echo $this->Html->link($category['Category']['name'],
-array('controller' => 'posts', 'action' => 'category_index',$category['Category']['id'])); ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-    <?php unset($category); ?>
-    </table>
 </div>

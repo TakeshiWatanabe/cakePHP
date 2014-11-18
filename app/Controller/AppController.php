@@ -1,4 +1,5 @@
 <?php
+App::uses('Controller', 'Controller');
 /**
  * Application level Controller
  *
@@ -19,7 +20,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-App::uses('Controller', 'Controller');
 
 /**
  * Application Controller
@@ -31,5 +31,22 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('DebugKit.Toolbar');
+	public $components = array(
+        'Acl',
+        'Auth' => array(
+            'authorize' => array(
+                'Actions' => array('actionPath' => 'controllers')
+            )
+        ),
+        'Session',
+        'DebugKit.Toolbar'
+    );
+    public $helpers = array('Html', 'Form', 'Session');
+
+    public function beforeFilter() {
+        //AuthComponentの設定
+        $this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
+        $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+        $this->Auth->loginRedirect = array('controller' => 'questions', 'action' => 'index');
+    }
 }

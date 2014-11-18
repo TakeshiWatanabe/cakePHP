@@ -24,12 +24,17 @@ class PostsController extends AppController {
     }
 
     public function category_index($category_id = null) {
+
         $posts = $this->Post->find('all',array('conditions' => array('category_id' => $category_id)));
+
+        //選択されたカテゴリーのデータを取得しておく
+        $selectedCategory = $this->Category->find('all',array('conditions' => array('id' => $category_id)));
+
 
         //Categoryモデルを使ってデータを取得
         $categories = $this->Category->find('all');
 
-        $this->set(compact('posts','categories'));
+        $this->set(compact('posts','categories','selectedCategory'));
 
     }
 

@@ -6,6 +6,7 @@
     <tr>
         <th>Id</th>
         <th>Title</th>
+        <th>Category</th>
         <th>Created</th>
     </tr>
 
@@ -21,6 +22,7 @@
             <?php echo $this->Html->link($post['Post']['title'],
 array('controller' => 'posts', 'action' => 'view', $post['Post']['id'])); ?>
         </td>
+        <td><?php echo $this->Html->link($post['Category']['name'],array('controller'=>'posts','action' => 'category_index',$post['Category']['id'])); ?></td>
         <td><?php echo $post['Post']['created']; ?></td>
     </tr>
     <?php endforeach; ?>
@@ -28,18 +30,5 @@ array('controller' => 'posts', 'action' => 'view', $post['Post']['id'])); ?>
 </table>
 </div>
 <div style="float:right;">
-    <table>
-        <?php foreach ($categories as $category): 
-       // debug($post);
-
-    ?>
-    <tr>
-        <td>
-            <?php echo $this->Html->link($category['Category']['name'],
-array('controller' => 'posts', 'action' => 'category_index',$category['Category']['id'])); ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-    <?php unset($category); ?>
-    </table>
+    <?php echo $this->element('rightside_menu'); ?>
 </div>
