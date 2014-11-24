@@ -54,5 +54,4 @@ class UsersController extends AppController {
     public function logout() {
         $this->Auth->logout();
     }
- 
 }
