@@ -1,10 +1,17 @@
 <?php
 class PostsController extends AppController {
-    public $helpers = array('Html', 'Form');
+    public $helpers = array('Html', 'Form','Paginator');
 
-    public $components = array('Session');
+    public $components = array('Session','Search.Prg');
 
     public $uses = array('Post','Category');
+
+    public $paginate = array(
+        'limit' => 7,
+        'order' => array(
+            'Post.title' => 'asc'
+        )
+    );
 
     public function beforeFilter(){
         parent::beforeFilter();
@@ -13,7 +20,11 @@ class PostsController extends AppController {
     }
 
     public function index() {
-    	$posts = $this->Post->find('all');
+    	
+        //$posts = $this->Post->find('all');
+
+        //$this->Paginator->settings = $this->paginate;
+        $posts = $this->paginate('Post');
 
         //Categoryモデルを使ってデータを取得
         $categories = $this->Category->find('all');
@@ -21,6 +32,18 @@ class PostsController extends AppController {
     	$this->set(compact('posts','categories'));
 
         //$this->set('posts', $this->Post->find('all'));
+    }
+
+    public function find() {
+        $this->Prg->commonProcess();
+
+        //$posts = $this->Post->find('all',array('conditions'=>array('title'=>'test')));
+
+        debug($this->Post->parseCriteria($this->Prg->parsedParams()));
+        
+        $posts = $this->Post->find('all',
+            array('conditions'=>$this->Post->parseCriteria($this->Prg->parsedParams())));
+        $this->set('posts', $posts);
     }
 
     public function category_index($category_id = null) {
@@ -53,6 +76,10 @@ class PostsController extends AppController {
     public function add(){
         //$this->layout = 'changePractice';
 
+        $categories = $this->Category->find('list');
+
+        $this->set(compact('categories'));
+        
         if ($this->request->is('post')) {
             $this->Post->create();
             debug($this->request->data);
@@ -84,6 +111,30 @@ class PostsController extends AppController {
 
             $this->Session->setFlash(__('Unable to add your post.'));
         }        
+    }
+
+    public function edit($id = null) {
+        if (!$id) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        $post = $this->Post->findById($id);
+        if (!$post) {
+            throw new NotFoundException(__('Invalid post'));
+        }
+
+        if ($this->request->is(array('post', 'put'))) {
+            $this->Post->id = $id;
+            if ($this->Post->save($this->request->data)) {
+                $this->Session->setFlash(__('Your post has been updated.'));
+                return $this->redirect(array('action' => 'index'));
+            }
+            $this->Session->setFlash(__('Unable to update your post.'));
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $post;
+        }
     }
 }
 ?>

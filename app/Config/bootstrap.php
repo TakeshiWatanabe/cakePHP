@@ -108,6 +108,7 @@ CakeLog::config('error', array(
 ));
 
 CakePlugin::load('DebugKit');
+CakePlugin::load('Search');
 CakePlugin::load('Acl', array('bootstrap' => true));
 
 App::uses('AclRouter', 'Acl.Lib');

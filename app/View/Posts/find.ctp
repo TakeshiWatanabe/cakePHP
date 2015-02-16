@@ -4,7 +4,7 @@
 <div style="float:left;">
 
 <form action="/cakephp/posts/find">
-    <input name="data[Post][title]" type="text" />
+    <input name="title" type="text" />
     <input name="search" value="Search" type="submit" />
 </form>
 
@@ -20,7 +20,6 @@ echo $this->Form->end('Search');
     array('controller' => 'posts', 'action' => 'add')
 ); ?>
 <br />
-<?php    echo $this->Paginator->numbers(array('separator' => '')); ?>
 <table>
     <tr>
         <th>Id</th>
@@ -56,7 +55,4 @@ array('controller' => 'posts', 'action' => 'view', $post['Post']['id'])); ?>
     <?php endforeach; ?>
     <?php unset($post); ?>
 </table>
-</div>
-<div style="float:right;">
-    <?php echo $this->element('rightside_menu'); ?>
 </div>
